@@ -40,4 +40,3 @@ class Node:
             return True
 
         return False
-
