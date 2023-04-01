@@ -1,4 +1,3 @@
-from gevent import monkey
 from flask import Flask, request
 import time
 import threading
@@ -8,15 +7,10 @@ import grequests
 import block
 import json
 
-monkey.patch_all()
 
-
-def start(server_id):
+def start(server_id, current_node):
     # Создадим сервер
     current_server = Flask(__name__)
-
-    # Создаем текущую node
-    current_node = node.Node(server_id)
 
     # Обозначаем порты и хоста
     if server_id == 1:
@@ -38,9 +32,6 @@ def start(server_id):
     host = 'localhost'
 
     servers_urls = [f'http://{host}:{current_port}/', f'http://{host}:{port2}/', f'http://{host}:{port3}/']
-
-    # Создаем текущую node
-    current_node = node.Node(server_id)
 
     # Функция генерации нового блока текущим сервером
     def new_blocks_generator():
@@ -78,12 +69,16 @@ def start(server_id):
         return "We received new Block"
 
     # Запустим сервер в отдельном потоке
-    threading.Thread(target=current_server.run, args=(host, current_port)).start()
-    threading.Thread(target=new_blocks_generator).start()
-    time.sleep(1)
+    current_server = threading.Thread(target=current_server.run, args=(host, current_port))
+    current_server_generator = threading.Thread(target=new_blocks_generator)
+    current_server.setDaemon(False)
+    current_server_generator.setDaemon(False)
+    current_server.start()
+    current_server_generator.start()
 
     # Создадим Генезис, если это первый сервер
     if server_id == 1:
+        time.sleep(1)
         genesis_block = node.create_genesis()
 
         # Отправим Асинхронно запрос всем серверам с сообщением, содержащим genesis_block
