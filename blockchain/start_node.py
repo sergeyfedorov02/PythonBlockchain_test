@@ -4,7 +4,7 @@ import threading
 import logging
 import grequests
 import json
-import block
+from blockchain.block import create_new_block, create_genesis
 
 
 def start(server_id, current_node):
@@ -41,7 +41,7 @@ def start(server_id, current_node):
                 prev_hash = last_block['hash']
 
                 # На основе последнего блока сгенерируем новый блок
-                new_block = block.create_new_block(current_node.block_index + 1, prev_hash, current_node.server_id,
+                new_block = create_new_block(current_node.block_index + 1, prev_hash, current_node.server_id,
                                                    server_id)
 
                 # Если сгенерированный нами new_block.index не присутствует еще -> значит мы первые
@@ -78,7 +78,7 @@ def start(server_id, current_node):
     # Создадим Генезис, если это первый сервер
     if server_id == 1:
         time.sleep(1)
-        genesis_block = block.create_genesis()
+        genesis_block = create_genesis()
 
         # Отправим Асинхронно запрос всем серверам с сообщением, содержащим genesis_block
         rs = (grequests.post(u, json=genesis_block) for u in servers_urls)
