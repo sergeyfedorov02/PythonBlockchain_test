@@ -2,12 +2,11 @@ import threading
 import time
 import json
 
+import blockchain.node as node
+import blockchain.start_node as start_node
+
 
 def test_start_node():
-    import sys
-    sys.path.append('../blockchain')
-    import blockchain.node as node
-    import blockchain.start_node as start_node
     server_id = 1
     current_node = node.Node(server_id)
 
@@ -27,12 +26,8 @@ def test_start_node():
     assert prev_hash == 'GENESIS'
     assert index == 0
 
+
 # def test_valid_blockchain():
-#     import sys
-#     sys.path.append('../blockchain')
-#     import blockchain.node as node
-#     import blockchain.start_node as start_node
-#
 #     node1 = node.Node(1)
 #     node2 = node.Node(2)
 #     node3 = node.Node(3)
