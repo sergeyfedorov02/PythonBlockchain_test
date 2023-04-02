@@ -2,10 +2,9 @@ from flask import Flask, request
 import time
 import threading
 import logging
-import node
 import grequests
-import block
 import json
+import block
 
 
 def start(server_id, current_node):
@@ -79,7 +78,7 @@ def start(server_id, current_node):
     # Создадим Генезис, если это первый сервер
     if server_id == 1:
         time.sleep(1)
-        genesis_block = node.create_genesis()
+        genesis_block = block.create_genesis()
 
         # Отправим Асинхронно запрос всем серверам с сообщением, содержащим genesis_block
         rs = (grequests.post(u, json=genesis_block) for u in servers_urls)
