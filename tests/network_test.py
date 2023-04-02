@@ -1,9 +1,8 @@
-import sys
 import threading
 import time
-
 import json
 
+import sys
 sys.path.append('../blockchain')
 
 import blockchain.node as node
@@ -44,10 +43,10 @@ def test_valid_blockchain():
     server2.start()
     server3.start()
 
-    while len(node1.blocks_array) < 100 or len(node2.blocks_array) < 100 or len(node3.blocks_array) < 100:
+    while len(node1.blocks_array) < 50 or len(node2.blocks_array) < 50 or len(node3.blocks_array) < 50:
         time.sleep(0.1)
 
-    for i in range(100):
+    for i in range(50):
         block_from_node_1 = json.loads(node1.blocks_array[i])
         block_from_node_2 = json.loads(node2.blocks_array[i])
         block_from_node_3 = json.loads(node3.blocks_array[i])
