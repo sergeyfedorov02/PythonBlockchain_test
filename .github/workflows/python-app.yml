@@ -31,4 +31,4 @@ jobs:
           python -m pip install pytest
       - name: Test with pytest
         run: |
-          python -m pytest tests/block_test.py tests/node_test.py
+          python -m pytest tests/block_test.py tests/network_test.py tests/node_test.py
